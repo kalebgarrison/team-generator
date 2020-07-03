@@ -12,127 +12,148 @@ const render = require("./lib/htmlRenderer");
 
 const allEmployees = [];
 
-function askEmployeeInfo(data){
- return inquirer
-.prompt([{
-
+function askEmployeeInfo(data) {
+  return inquirer
+    .prompt([
+      {
         type: "list",
         name: "role",
         message: "What is their role?",
-        choices: [
-            Manager,
-            Engineer,
-            Intern
-        ]
-
- }])
-.then(function(employee) {
-    switch (employee.role){
+        choices: [Manager, Engineer, Intern],
+      },
+    ])
+    .then(function (employee) {
+      switch (employee.role) {
         case "Manager":
-            return inquirer
-            .prompt([{
+          return inquirer
+            .prompt([
+              {
                 type: "input",
                 name: "name",
-                message: "What is the team members name?"
-            },
-            {
+                message: "What is the team members name?",
+              },
+              {
                 type: "input",
                 name: "ID",
-                message: "What is the employee's ID number?"
-            },
-            {
+                message: "What is the employee's ID number?",
+              },
+              {
                 type: "input",
                 name: "email",
-                message: "What is the employee's email address?"
-            },
-            {
+                message: "What is the employee's email address?",
+              },
+              {
                 type: "input",
                 name: "officeNumber",
-                message: "What is your office number?"
-
-            }])
-            .then(function(managerInfo){
-                let newManager = new Manager(managerInfo.name, managerInfo.ID, managerInfo.email, managerInfo.officeNumber)
-                allEmployees.push(newManager);
-                addUser()
-            })
+                message: "What is your office number?",
+              },
+            ])
+            .then(function (managerInfo) {
+              let newManager = new Manager(
+                managerInfo.name,
+                managerInfo.ID,
+                managerInfo.email,
+                managerInfo.officeNumber
+              );
+              allEmployees.push(newManager);
+              addUser();
+            });
         case "Engineer":
-            return inquirer
-            .prompt([{
+          return inquirer
+            .prompt([
+              {
                 type: "input",
                 name: "name",
-                message: "What is the team members name?"
-            },
-            {
+                message: "What is the team members name?",
+              },
+              {
                 type: "input",
                 name: "ID",
-                message: "What is the employee's ID number?"
-            },
-            {
+                message: "What is the employee's ID number?",
+              },
+              {
                 type: "input",
                 name: "email",
-                message: "What is the employee's email address?"
-            },
-            {
+                message: "What is the employee's email address?",
+              },
+              {
                 type: "input",
                 name: "github",
-                message: "What is your GitHub username?"
-             }])
-             .then(function(engineerInfo){
-                 let newEngineer = new Engineer(engineerInfo.name, engineerInfo.ID, engineerInfo.email, engineerInfo.github)
-                 allEmployees.push(newEngineer)
-                 addUser()
-             })
+                message: "What is your GitHub username?",
+              },
+            ])
+            .then(function (engineerInfo) {
+              let newEngineer = new Engineer(
+                engineerInfo.name,
+                engineerInfo.ID,
+                engineerInfo.email,
+                engineerInfo.github
+              );
+              allEmployees.push(newEngineer);
+              addUser();
+            });
         case "Intern":
-            return inquirer
-            .prompt([{
+          return inquirer
+            .prompt([
+              {
                 type: "input",
                 name: "name",
-                message: "What is the team members name?"
-            },
-            {
+                message: "What is the team members name?",
+              },
+              {
                 type: "input",
                 name: "ID",
-                message: "What is the employee's ID number?"
-            },
-            {
+                message: "What is the employee's ID number?",
+              },
+              {
                 type: "input",
                 name: "email",
-                message: "What is the employee's email address?"
-            },
-            {
+                message: "What is the employee's email address?",
+              },
+              {
                 type: "input",
                 name: "school",
-                message: "What is the name of your school?"
-             }])
-             .then(function(internInfo){
-                 let newIntern = new Intern(internInfo.name, internInfo.ID, internInfo.email, internInfo.school)
-                 allEmployees.push(newIntern)
-                 addUser()
-             })
-
+                message: "What is the name of your school?",
+              },
+            ])
+            .then(function (internInfo) {
+              let newIntern = new Intern(
+                internInfo.name,
+                internInfo.ID,
+                internInfo.email,
+                internInfo.school
+              );
+              allEmployees.push(newIntern);
+              addUser();
+            });
+      }
+    });
 }
-})
-}
-askEmployeeInfo()
+askEmployeeInfo();
 
-
-function addUser(){
-    inquirer 
-    .prompt([{
+function addUser() {
+  inquirer
+    .prompt([
+      {
         type: "confirm",
         name: "addEmployee",
-        message: "Would you like to add another employee?"
-    }])
-    .then(function(add){
-        
-        if (add.addEmployee === true){
-            askEmployeeInfo()
-        } else {
-            console.log("render Html")
-            console.log(allEmployees)
-        }
-    }) 
+        message: "Would you like to add another employee?",
+      },
+    ])
+    .then(function (add) {
+      if (add.addEmployee === true) {
+        askEmployeeInfo();
+      } else {
+          fs.writeFile(outputPath, render(allEmployees), function(err) {
+              if (err){
+                  return console.log(err);
+              } else {
+                  return console.log("Loading team.html...")
+              }
+          })
+          
+      }
+    });
 }
 
 
